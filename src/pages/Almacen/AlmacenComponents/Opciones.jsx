@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { RiCloseLine, RiDeleteBin6Line } from "react-icons/ri";
 import { AlmacenContext } from "./../AlmacenContext";
-import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+import { Modal, ModalHeader, ModalBody } from "reactstrap";
 
 const Opciones = (props) => {
   const {
@@ -9,23 +9,18 @@ const Opciones = (props) => {
     setShowOpciones,
     setModalInsertMateriales,
     setModalInsertHerramientas,
-    setModalInsertAccesorios,
-    elemento,
+    setModalInsertAccesorios
   } = props;
 
   const [modalListRetiros, setModalInsertMaterial] = useState(false);
   const [retiros, setRetiros] = useState([]);
   const [retirosRegistrados, setRetirosRegistrados] = useState([]);
 
-  const openList = () => {
-    setModalInsertMaterial(true);
-  };
-
   const closeModal = () => {
     setModalInsertMaterial(false);
   };
 
-  const { elementosRetirar, eliminarElementoRetirar,limpiarElementos } =
+  const { elementosRetirar,eliminarElementoRetirar,limpiarElementos } =
     useContext(AlmacenContext);
 
   const handleRetiros = () => {
@@ -33,7 +28,6 @@ const Opciones = (props) => {
 
     const nuevosRetiros = retiros.map((retiro, index) => {
       const elemento = elementosRetirar[index];
-      const nombreRetiro = elemento.nombre;
       const descripcionRetiro = retiro.descripcionRetiro;
       const cantidadRetiro = retiro.cantidadRetiro;
 
