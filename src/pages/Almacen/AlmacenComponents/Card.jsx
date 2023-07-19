@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AlmacenContext } from "./../AlmacenContext";
 import { RiAddLine } from "react-icons/ri";
 
-const Card = ({ item, activeFilter}) => {
+const Card = ({ item, activeFilter }) => {
   const { elementosRetirar, setElementosRetirar } = useContext(AlmacenContext);
   let nombre, descripcion, cantidad, operativa, accesoriode, imagen;
 
@@ -28,9 +28,9 @@ const Card = ({ item, activeFilter}) => {
 
   const handleRetirar = () => {
     const elementoRetiro = { nombre, imagen, cantidad };
-    setElementosRetirar((prevElementos) => [...prevElementos, elementoRetiro]);
-    const cantidadesRetiradas = elementosRetirar.map((elemento) => elemento.cantidad);
-    (cantidadesRetiradas);
+    setElementosRetirar(prevElementos => {
+      return [...prevElementos, elementoRetiro];
+    });
   };
 
   return (

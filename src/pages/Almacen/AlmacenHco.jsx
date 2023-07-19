@@ -13,6 +13,7 @@ import Sidebar from "../../components/shared/Sidebar";
 import { Opciones } from "./AlmacenComponents/Opciones";
 import Header from "./AlmacenComponents/Header";
 import { AList } from "./AlmacenComponents/AList";
+import { AlmacenProvider } from "./AlmacenContext";
 
 function AlmacenHco() {
   const [showMenu, setShowMenu] = useState(false);
@@ -156,14 +157,14 @@ function AlmacenHco() {
       imagenHerramienta,
       imagenURLHerramienta,
     };
-  
+
     const updatedHerramientas = [...almacen.herramientas, newHerramienta];
-  
+
     setAlmacen((prevAlmacen) => ({
       ...prevAlmacen,
       herramientas: updatedHerramientas,
     }));
-  
+
     setFilteredAlmacen(updatedHerramientas);
   };
 
@@ -303,64 +304,66 @@ function AlmacenHco() {
   return (
     <div className="bg-[#262837] w-full min-h-screen">
       <Sidebar showMenu={showMenu} />
-      <Opciones
-        showOpciones={showOpciones}
-        setShowOpciones={setShowOpciones}
-        setModalInsertMateriales={setModalInsertMateriales}
-        setModalInsertHerramientas={setModalInsertHerramientas}
-        setModalInsertAccesorios={setModalInsertAccesorios}
-      />
-      {/* Menu movil */}
-      <nav
-        className={`bg-[#1F1D2B] lg:hidden fixed w-full bottom-0 left-0 text-3xl text-gray-400 py-2 px-8 flex items-center justify-between rounded-tl-xl rounded-tr-xl ${
-          showMenu ? "" : ""
-        }`}
-      >
-        <button
-          onClick={toggleMenu}
-          className={`text-white p-2 ${
-            showMenu ? "transform translate-x-20" : ""
+      <AlmacenProvider>
+        <Opciones
+          showOpciones={showOpciones}
+          setShowOpciones={setShowOpciones}
+          setModalInsertMateriales={setModalInsertMateriales}
+          setModalInsertHerramientas={setModalInsertHerramientas}
+          setModalInsertAccesorios={setModalInsertAccesorios}
+        />
+        {/* Menu movil */}
+        <nav
+          className={`bg-[#1F1D2B] lg:hidden fixed w-full bottom-0 left-0 text-3xl text-gray-400 py-2 px-8 flex items-center justify-between rounded-tl-xl rounded-tr-xl ${
+            showMenu ? "" : ""
           }`}
         >
-          {showMenu ? <RiCloseLine /> : <RiMenu3Fill />}
-        </button>
-        <button className="p-2">
-          <RiUser3Line />
-        </button>
-        <button onClick={toggleOptions} className="p-2">
-          <RiPieChartLine />
-        </button>
-      </nav>
-      <main className="lg:pl-32 lg:pr-96 pb-20">
-        <div className="md:p-8 p-4">
-          {/* Header */}
-          <Header title="ALMACEN HUANCHACO" />
-          {/* Title content */}
-          <div className="flex items-center justify-center lg:justify-end mb-16">
-            <div className="flex items-center gap-2 py-2 rounded-lg">
-              <button
-                className="hover:bg-[#276bac] text-white py-2 px-4 rounded-xl border border-gray-500"
-                onClick={() => setActiveFilter("materiales")}
-              >
-                Materiales
-              </button>
-              <button
-                className="hover:bg-[#276bac] text-white py-2 px-4 rounded-xl border border-gray-500"
-                onClick={() => setActiveFilter("herramientas")}
-              >
-                Herramientas
-              </button>
-              <button
-                className="hover:bg-[#276bac] text-white py-2 px-4 rounded-xl border border-gray-500"
-                onClick={() => setActiveFilter("accesorios")}
-              >
-                Accesorios
-              </button>
+          <button
+            onClick={toggleMenu}
+            className={`text-white p-2 ${
+              showMenu ? "transform translate-x-20" : ""
+            }`}
+          >
+            {showMenu ? <RiCloseLine /> : <RiMenu3Fill />}
+          </button>
+          <button className="p-2">
+            <RiUser3Line />
+          </button>
+          <button onClick={toggleOptions} className="p-2">
+            <RiPieChartLine />
+          </button>
+        </nav>
+        <main className="lg:pl-32 lg:pr-96 pb-20">
+          <div className="md:p-8 p-4">
+            {/* Header */}
+            <Header title="ALMACEN HUANCHACO" />
+            {/* Title content */}
+            <div className="flex items-center justify-center lg:justify-end mb-16">
+              <div className="flex items-center gap-2 py-2 rounded-lg">
+                <button
+                  className="hover:bg-[#276bac] text-white py-2 px-4 rounded-xl border border-gray-500"
+                  onClick={() => setActiveFilter("materiales")}
+                >
+                  Materiales
+                </button>
+                <button
+                  className="hover:bg-[#276bac] text-white py-2 px-4 rounded-xl border border-gray-500"
+                  onClick={() => setActiveFilter("herramientas")}
+                >
+                  Herramientas
+                </button>
+                <button
+                  className="hover:bg-[#276bac] text-white py-2 px-4 rounded-xl border border-gray-500"
+                  onClick={() => setActiveFilter("accesorios")}
+                >
+                  Accesorios
+                </button>
+              </div>
             </div>
+            <AList activeFilter={activeFilter} almacen={filteredAlmacen} />
           </div>
-          <AList activeFilter={activeFilter} almacen={filteredAlmacen} />
-        </div>
-      </main>
+        </main>
+      </AlmacenProvider>
 
       <Modal isOpen={modalInsertMateriales} toggle={closeModalInsertMateriales}>
         <div className="bg-[#1F1D2B] p-4 text-white ">
@@ -480,9 +483,7 @@ function AlmacenHco() {
               />
             </div>
             <div className="mb-4">
-              <label className="block font-bold mb-1">
-                CANTIDAD :
-              </label>
+              <label className="block font-bold mb-1">CANTIDAD :</label>
               <input
                 type="text"
                 value={cantidadHerramienta}
@@ -502,9 +503,7 @@ function AlmacenHco() {
               />
             </div>
             <div className="mb-4">
-              <label className="block font-bold mb-1">
-                IMAGEN :
-              </label>
+              <label className="block font-bold mb-1">IMAGEN :</label>
               <input
                 type="text"
                 value={imagenHerramienta}
@@ -513,9 +512,7 @@ function AlmacenHco() {
               />
             </div>
             <div className="mb-4">
-              <label className="block font-bold mb-1">
-                IMAGENURL :
-              </label>
+              <label className="block font-bold mb-1">IMAGENURL :</label>
               <input
                 type="text"
                 value={imagenURLHerramienta}
@@ -553,9 +550,7 @@ function AlmacenHco() {
           </ModalHeader>
           <ModalBody className="grid grid-cols-2 gap-5">
             <div className="mb-4">
-              <label className="block font-bold mb-1">
-                NOMBRE :
-              </label>
+              <label className="block font-bold mb-1">NOMBRE :</label>
               <input
                 type="text"
                 value={nombreAccesorio}
@@ -564,9 +559,7 @@ function AlmacenHco() {
               />
             </div>
             <div className="mb-4">
-              <label className="block font-bold mb-1">
-                DESCRIPCION :
-              </label>
+              <label className="block font-bold mb-1">DESCRIPCION :</label>
               <input
                 type="text"
                 value={descripcionAccesorio}
@@ -575,9 +568,7 @@ function AlmacenHco() {
               />
             </div>
             <div className="mb-4">
-              <label className="block font-bold mb-1">
-                CANTIDAD :
-              </label>
+              <label className="block font-bold mb-1">CANTIDAD :</label>
               <input
                 type="text"
                 value={cantidadAccesorio}
@@ -586,9 +577,7 @@ function AlmacenHco() {
               />
             </div>
             <div className="mb-4">
-              <label className="block font-bold mb-1">
-                ACCESORIO DE :
-              </label>
+              <label className="block font-bold mb-1">ACCESORIO DE :</label>
               <input
                 type="text"
                 value={accesoriodeAccesorio}
@@ -597,9 +586,7 @@ function AlmacenHco() {
               />
             </div>
             <div className="mb-4">
-              <label  className="block font-bold mb-1">
-                IMAGEN :
-              </label>
+              <label className="block font-bold mb-1">IMAGEN :</label>
               <input
                 type="text"
                 value={imagenAccesorio}
@@ -608,9 +595,7 @@ function AlmacenHco() {
               />
             </div>
             <div className="mb-4">
-              <label className="block font-bold mb-1">
-                IMAGENURL :
-              </label>
+              <label className="block font-bold mb-1">IMAGENURL :</label>
               <input
                 type="text"
                 value={imagenURLAccesorio}

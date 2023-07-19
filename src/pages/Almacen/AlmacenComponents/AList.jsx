@@ -1,11 +1,7 @@
-import React, { useContext } from "react";
-import { AlmacenContext } from "./../AlmacenContext";
 import { Card } from "./Card";
 
 const AList = ({ almacen, activeFilter }) => {
-  const {actualizarCantidadesRetiradas } = useContext(AlmacenContext);
   return (
-    
     <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
       {almacen.map((item, index) => {
         let key;
@@ -16,13 +12,7 @@ const AList = ({ almacen, activeFilter }) => {
         } else {
           key = "M" + (item.idMaterial || item.id || index); // Usar índice como clave predeterminada
         }
-        return<Card
-        key={key}
-        item={item}
-        activeFilter={activeFilter}
-        actualizarCantidadesRetiradas={actualizarCantidadesRetiradas}
-        almacen={almacen}
-      />;
+        return <Card key={key} item={item} activeFilter={activeFilter} />;
       })}
     </div>
   );
