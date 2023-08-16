@@ -315,19 +315,16 @@ function AlmacenHco() {
         {/* Menu movil */}
         <nav
           className={`bg-[#1F1D2B] lg:hidden fixed w-full bottom-0 left-0 text-3xl text-gray-400 py-2 px-8 flex items-center justify-between rounded-tl-xl rounded-tr-xl ${
-            showMenu ? "" : ""
+            showMenu ? "flex justify-items-end pl-36" : ""
           }`}
         >
           <button
             onClick={toggleMenu}
             className={`text-white p-2 ${
-              showMenu ? "transform translate-x-20" : ""
+              showMenu ? "" : ""
             }`}
           >
             {showMenu ? <RiCloseLine /> : <RiMenu3Fill />}
-          </button>
-          <button className="p-2">
-            <RiUser3Line />
           </button>
           <button onClick={toggleOptions} className="p-2">
             <RiPieChartLine />
@@ -338,7 +335,7 @@ function AlmacenHco() {
             {/* Header */}
             <Header title="ALMACEN HUANCHACO" />
             {/* Title content */}
-            <div className="flex items-center justify-center lg:justify-end mb-16">
+            <div className="flex items-center justify-center lg:justify-end mb-16 max-sm:text-sm">
               <div className="flex items-center gap-2 py-2 rounded-lg">
                 <button
                   className="hover:bg-[#276bac] text-white py-2 px-4 rounded-xl border border-gray-500"

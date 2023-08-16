@@ -4,7 +4,6 @@ const AlmacenContext = createContext();
 
 const AlmacenProvider = ({ children }) => {
   const [elementosRetirar, setElementosRetirar] = useState([]);
-  const [almacen, setAlmacen] = useState([]);
 
   const eliminarElementoRetirar = (index) => {
     const updatedElementosRetirar = [...elementosRetirar];
