@@ -4,7 +4,7 @@ import { AlmacenContext } from "./../AlmacenContext";
 import { RiAddLine } from "react-icons/ri";
 
 const Card = ({ item, activeFilter }) => {
-  const { setElementosRetirar } = useContext(AlmacenContext);
+  const { setElementosRetirar} = useContext(AlmacenContext);
   let nombre, descripcion, cantidad, operativa, accesoriode, imagen;
 
   if (activeFilter === "materiales") {

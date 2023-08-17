@@ -9,7 +9,8 @@ const Opciones = (props) => {
     setShowOpciones,
     setModalInsertMateriales,
     setModalInsertHerramientas,
-    setModalInsertAccesorios
+    setModalInsertAccesorios,
+    activeFilter,
   } = props;
 
   const [modalListRetiros, setModalInsertMaterial] = useState(false);
@@ -20,17 +21,22 @@ const Opciones = (props) => {
     setModalInsertMaterial(false);
   };
 
-  const { elementosRetirar,eliminarElementoRetirar,limpiarElementos } =
-    useContext(AlmacenContext);
+  const {
+    almacen,
+    elementosRetirar,
+    eliminarElementoRetirar,
+    limpiarElementos,
+    setAlmacen,
+  } = useContext(AlmacenContext);
 
   const handleRetiros = () => {
     const hechopor = "Kevin R.";
-
+  
     const nuevosRetiros = retiros.map((retiro, index) => {
       const elemento = elementosRetirar[index];
       const descripcionRetiro = retiro.descripcionRetiro;
       const cantidadRetiro = retiro.cantidadRetiro;
-
+  
       return {
         idRetiro: retirosRegistrados.length + index + 1,
         nombreRetiro: elemento.nombre,
@@ -39,11 +45,46 @@ const Opciones = (props) => {
         hechopor,
       };
     });
-
+  
     setRetirosRegistrados([...retirosRegistrados, ...nuevosRetiros]);
     setRetiros([]);
     limpiarElementos();
+  
+    nuevosRetiros.forEach((retiro) => {
+      setAlmacen((prevAlmacen) => {
+        const updatedAlmacen = { ...prevAlmacen };
+  
+        if (activeFilter === "materiales") {
+          const materialIndex = updatedAlmacen.materiales.findIndex(
+            (m) => m.nombreMaterial === retiro.nombreRetiro
+          );
+          if (materialIndex !== -1) {
+            updatedAlmacen.materiales[materialIndex].cantidadMaterial -=
+              retiro.cantidadRetiro/2;
+          }
+        } else if (activeFilter === "herramientas") {
+          const herramientaIndex = updatedAlmacen.herramientas.findIndex(
+            (h) => h.nombreHerramienta === retiro.nombreRetiro
+          );
+          if (herramientaIndex !== -1) {
+            updatedAlmacen.herramientas[herramientaIndex].cantidadHerramienta -=
+              retiro.cantidadRetiro/2;
+          }
+        } else if (activeFilter === "accesorios") {
+          const accesorioIndex = updatedAlmacen.accesorios.findIndex(
+            (a) => a.nombreAccesorio === retiro.nombreRetiro
+          );
+          if (accesorioIndex !== -1) {
+            updatedAlmacen.accesorios[accesorioIndex].cantidadAccesorio -=
+              retiro.cantidadRetiro/2;
+          }
+        }
+  
+        return updatedAlmacen;
+      });
+    });
   };
+  
 
   const handleDelete = (index) => {
     eliminarElementoRetirar(index);
@@ -54,6 +95,7 @@ const Opciones = (props) => {
     if (!updatedRetiros[index]) {
       updatedRetiros[index] = {};
     }
+
     updatedRetiros[index][field] = value;
     setRetiros(updatedRetiros);
   };
@@ -192,9 +234,15 @@ const Opciones = (props) => {
         </div>
       </div>
 
-      <Modal isOpen={modalListRetiros} toggle={closeModal} className="min-h-fit min-w-fit">
+      <Modal
+        isOpen={modalListRetiros}
+        toggle={closeModal}
+        className="min-h-fit min-w-fit"
+      >
         <div className="bg-[#1F1D2B] text-white p-3 text-center">
-          <ModalHeader toggle={closeModal} className="text-2xl">HISTORIAL DE RETIROS</ModalHeader>
+          <ModalHeader toggle={closeModal} className="text-2xl">
+            HISTORIAL DE RETIROS
+          </ModalHeader>
           <ModalBody>
             <table className="">
               <thead>
@@ -208,9 +256,15 @@ const Opciones = (props) => {
               <tbody>
                 {retirosRegistrados.map((retiro) => (
                   <tr className="grid grid-cols-11" key={retiro.idRetiro}>
-                    <td className="col-span-3 text-justify">{retiro.nombreRetiro}</td>
-                    <td className="col-span-4 text-justify">{retiro.descripcionRetiro}</td>
-                    <td className="col-span-1 text-center">{retiro.cantidadRetiro}</td>
+                    <td className="col-span-3 text-justify">
+                      {retiro.nombreRetiro}
+                    </td>
+                    <td className="col-span-4 text-justify">
+                      {retiro.descripcionRetiro}
+                    </td>
+                    <td className="col-span-1 text-center">
+                      {retiro.cantidadRetiro}
+                    </td>
                     <td className="col-span-3">{retiro.hechopor}</td>
                   </tr>
                 ))}
