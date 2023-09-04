@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import {
   RiMenu3Fill,
-  RiUser3Line,
   RiPieChartLine,
   RiCloseLine,
 } from "react-icons/ri";
